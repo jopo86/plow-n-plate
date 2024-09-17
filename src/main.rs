@@ -8,6 +8,10 @@ enum QuadType {
     Dirt,
 }
 
+enum CropType {
+    Wheat,
+}
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
@@ -65,6 +69,7 @@ fn sys_spawn_quads(
     for i in -1..=1 {
         for j in -1..=1 {
             spawn_quad(QuadType::Dirt, Vec3::new(i as f32, j as f32, 0.0), &mut cmd, &asset_server);
+            spawn_crop(CropType::Wheat, Vec3::new(i as f32, j as f32, 1.0), &mut cmd, &asset_server);
         }
         
         spawn_quad(QuadType::Grass, Vec3::new(-2.0, i as f32, 0.0), &mut cmd, &asset_server);
@@ -92,6 +97,24 @@ fn spawn_quad(
         texture: asset_server.load(match quad_type {
             QuadType::Dirt => "textures/dirt.png",
             QuadType::Grass => "textures/grass.png",
+        }),
+        transform: Transform::from_xyz(pos.x, pos.y, pos.z).with_scale(Vec3::splat(SCALE)),
+        ..default()
+    });
+}
+
+fn spawn_crop(
+    crop_type: CropType,
+    mut pos: Vec3,
+    cmd: &mut Commands,
+    asset_server: &Res<AssetServer>,
+) {
+    pos *= 16.0 * SCALE;
+    pos.y += 8.0 * SCALE;
+
+    cmd.spawn(SpriteBundle {
+        texture: asset_server.load(match crop_type {
+            CropType::Wheat => "textures/wheat.png",
         }),
         transform: Transform::from_xyz(pos.x, pos.y, pos.z).with_scale(Vec3::splat(SCALE)),
         ..default()
