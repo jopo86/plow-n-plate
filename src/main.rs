@@ -42,10 +42,10 @@ fn main() {
 }
 
 fn sys_close_if_esc(
-    r_kbd: Res<ButtonInput<KeyCode>>,
+    kbd: Res<ButtonInput<KeyCode>>,
     mut ew_exit: EventWriter<AppExit>,
 ) {
-    if r_kbd.just_pressed(KeyCode::Escape) {
+    if kbd.just_pressed(KeyCode::Escape) {
         ew_exit.send(AppExit::Success);
     }
 }
