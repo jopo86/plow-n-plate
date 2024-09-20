@@ -23,7 +23,7 @@ struct Crop;
 // TODO: lots of cleanup to be done obviously, just getting a little demo going
 
 /*
- * SYSTEM CONVENTIONS (this may get annoying idk)
+ * CONVENTIONS (for systems) (this may get annoying idk)
  * - prefix fn name with sys_
  * - prefix queries with q_
  * - prefix event writers with ew_
@@ -154,7 +154,7 @@ fn sys_scale_with_scroll(
 }
 
 fn spawn_plot(
-    quad_type: PlotType,
+    plot_type: PlotType,
     mut pos: Vec3,
     cmd: &mut Commands,
     asset_server: &Res<AssetServer>,
@@ -163,7 +163,7 @@ fn spawn_plot(
 
     cmd.spawn((
         SpriteBundle {
-            texture: asset_server.load(match quad_type {
+            texture: asset_server.load(match plot_type {
                 PlotType::Dirt => "textures/dirt.png",
                 PlotType::Grass => "textures/grass.png",
             }),
