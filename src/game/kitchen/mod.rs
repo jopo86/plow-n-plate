@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::states::KitchenState;
+use crate::global::states::KitchenState;
 
 pub struct KitchenPlugin;
 

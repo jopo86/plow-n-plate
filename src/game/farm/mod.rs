@@ -2,7 +2,7 @@ mod defs;
 use defs::*;
 
 use bevy::{input::mouse::{MouseMotion, MouseScrollUnit, MouseWheel}, prelude::*, window::PrimaryWindow};
-use crate::states::{GameState, FarmState};
+use crate::global::{states::{GameState, FarmState}, resources::MousePos};
 use super::{GameObj, SPRITE_SCALE};
 
 pub struct FarmPlugin;
@@ -45,21 +45,18 @@ fn sys_spawn_plots(
 fn sys_move_with_mouse(
     mut q_plots_and_crops: Query<&mut Transform, With<GameObj>>,
     mouse_button: Res<ButtonInput<MouseButton>>,
-    mut er_mouse: EventReader<MouseMotion>,
+    mouse_pos: Res<MousePos>, // custom resource
 ) {
     if !mouse_button.pressed(MouseButton::Left) && !mouse_button.pressed(MouseButton::Right) {
         return;
     }
 
-    for ev in er_mouse.read() {
-        for mut transform in q_plots_and_crops.iter_mut() {
-            transform.translation.x += ev.delta.x;
-            transform.translation.y -= ev.delta.y;
-        }
+    for mut transform in q_plots_and_crops.iter_mut() {
+        transform.translation.x += mouse_pos.dx;
+        transform.translation.y -= mouse_pos.dy;
     }
 }
 
-// TODO: use some custom resource to handle mouse movement cleanly
 fn sys_scale_with_scroll(
     mut q_plots_and_crops: Query<&mut Transform, With<GameObj>>,
     mut er_scroll: EventReader<MouseWheel>,

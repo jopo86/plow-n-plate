@@ -3,7 +3,7 @@ mod kitchen;
 
 use bevy::prelude::*;
 
-use crate::states::GameState;
+use crate::global::states::GameState;
 
 pub struct GamePlugin;
 

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::states::MenuState;
+use crate::global::states::MenuState;
 
 pub struct MenuPlugin;
 

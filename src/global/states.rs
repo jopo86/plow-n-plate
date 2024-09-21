@@ -1,4 +1,4 @@
-use bevy::state::prelude::*;
+use bevy::state::state::States;
 
 /*
                                                                         STATES
