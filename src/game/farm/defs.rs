@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::game::GameObj;
+use bevy::prelude::*;
 
 pub enum PlotType {
     Grass,

@@ -3,14 +3,13 @@ mod kitchen;
 
 use bevy::prelude::*;
 
-use crate::global::states::GameState;
+use crate::global::state::State;
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((farm::FarmPlugin, kitchen::KitchenPlugin));
-        app.init_state::<GameState>();
     }
 }
 

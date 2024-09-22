@@ -1,11 +1,15 @@
-use bevy::prelude::*;
+mod main_menu;
+mod options_menu;
 
-use crate::global::states::MenuState;
+use bevy::prelude::*;
 
 pub struct MenuPlugin;
 
 impl Plugin for MenuPlugin {
     fn build(&self, app: &mut App) {
-        app.init_state::<MenuState>();
+        app.add_plugins((main_menu::MainMenuPlugin, options_menu::OptionsMenuPlugin));
     }
 }
+
+#[derive(Component)]
+struct MenuObj;
