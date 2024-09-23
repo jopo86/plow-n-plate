@@ -15,6 +15,21 @@ impl Plugin for SpawnWorldPlugin {
 }
 
 fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
+
+    for i in -20..=20 {
+        for j in -20..=20 {
+            if (-1..=1).contains(&i) && (-1..=1).contains(&j) {
+                continue;
+            }
+            spawn_plot(
+                PlotType::Grass,
+                Vec3::new(i as f32, j as f32, 0.0),
+                &mut cmd,
+                &asset_server,
+            );
+        }
+    }
+
     for i in -1..=1 {
         for j in -1..=1 {
             spawn_plot(
@@ -30,58 +45,7 @@ fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 &asset_server,
             );
         }
-
-        spawn_plot(
-            PlotType::Grass,
-            Vec3::new(-2.0, i as f32, 0.0),
-            &mut cmd,
-            &asset_server,
-        );
-        spawn_plot(
-            PlotType::Grass,
-            Vec3::new(i as f32, 2.0, 0.0),
-            &mut cmd,
-            &asset_server,
-        );
-
-        spawn_plot(
-            PlotType::Grass,
-            Vec3::new(2.0, i as f32, 0.0),
-            &mut cmd,
-            &asset_server,
-        );
-        spawn_plot(
-            PlotType::Grass,
-            Vec3::new(i as f32, -2.0, 0.0),
-            &mut cmd,
-            &asset_server,
-        );
     }
-
-    spawn_plot(
-        PlotType::Grass,
-        Vec3::new(-2.0, -2.0, 0.0),
-        &mut cmd,
-        &asset_server,
-    );
-    spawn_plot(
-        PlotType::Grass,
-        Vec3::new(-2.0, 2.0, 0.0),
-        &mut cmd,
-        &asset_server,
-    );
-    spawn_plot(
-        PlotType::Grass,
-        Vec3::new(2.0, -2.0, 0.0),
-        &mut cmd,
-        &asset_server,
-    );
-    spawn_plot(
-        PlotType::Grass,
-        Vec3::new(2.0, 2.0, 0.0),
-        &mut cmd,
-        &asset_server,
-    );
 }
 
 fn sys_despawn_world(

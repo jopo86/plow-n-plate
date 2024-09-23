@@ -1,3 +1,6 @@
+mod helpers;
+use helpers::*;
+
 use bevy::prelude::*;
 
 use super::defs::FarmHudObj;
@@ -25,13 +28,15 @@ fn sys_spawn_hud(
             style: Style {
                 width: Val::Percent(100.0),
                 height: Val::Percent(100.0),
+                flex_direction: FlexDirection::Column,
+                align_items: AlignItems::FlexStart,
                 ..Default::default()
             },
             ..Default::default()
         },
         FarmHudObj,
     )).with_children(|parent| {
-        // TODO
+        top_bar::build(parent, &asset_server);
     });
 }
 
