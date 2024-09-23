@@ -11,6 +11,8 @@ pub trait CustomColors {
     const GRAY_0: Color;
     const GRAY_1: Color;
     const GRAY_2: Color;
+
+    const TRANSPARENT: Color;
 }
 
 impl CustomColors for Color {
@@ -24,4 +26,6 @@ impl CustomColors for Color {
     const GRAY_0: Color = Color::srgb(0.1, 0.1, 0.1);
     const GRAY_1: Color = Color::srgb(0.15, 0.15, 0.15);
     const GRAY_2: Color = Color::srgb(0.2, 0.2, 0.2);
+
+    const TRANSPARENT: Color = Color::srgba(0.0, 0.0, 0.0, 0.0);
 }
