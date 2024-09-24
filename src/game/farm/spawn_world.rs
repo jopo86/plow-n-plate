@@ -1,4 +1,4 @@
-use super::defs::*;
+use super::*;
 
 use bevy::prelude::*;
 

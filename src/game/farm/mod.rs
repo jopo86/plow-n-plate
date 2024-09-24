@@ -1,11 +1,9 @@
-mod defs;
 mod hud;
 mod spawn_world;
 mod move_world;
 
-use crate::global::state::{Game, State};
-
 use bevy::prelude::*;
+use super::GameObj;
 
 pub struct FarmPlugin;
 
@@ -18,3 +16,30 @@ impl Plugin for FarmPlugin {
         ));
     }
 }
+
+pub enum PlotType {
+    Grass,
+    Dirt,
+}
+
+pub enum CropType {
+    Wheat,
+}
+
+#[derive(Component)]
+pub struct FarmGameObj;
+
+#[derive(Component)]
+pub struct FarmHudObj;
+
+#[derive(Component)]
+pub struct Plot;
+
+#[derive(Component)]
+pub struct Crop;
+
+#[derive(Bundle)]
+pub struct PlotBundle(pub SpriteBundle, pub GameObj, pub FarmGameObj, pub Plot);
+
+#[derive(Bundle)]
+pub struct CropBundle(pub SpriteBundle, pub GameObj, pub FarmGameObj, pub Crop);

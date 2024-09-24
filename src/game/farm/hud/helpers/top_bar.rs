@@ -1,7 +1,15 @@
 use bevy::prelude::*;
 
-use super::super::FarmHudObj;
+use crate::game::farm::FarmHudObj;
 use crate::global::colors::CustomColors;
+
+#[derive(Component)]
+pub struct TopBarBtn(pub TopBarBtnType);
+
+pub enum TopBarBtnType {
+    Back,
+    Other,
+}
 
 pub fn build(
     parent: &mut ChildBuilder<'_>,
@@ -24,11 +32,11 @@ pub fn build(
         },
         FarmHudObj,
     )).with_children(|parent| {
-        build_button(parent, asset_server, "<--");
-        build_button(parent, asset_server, "?");
-        build_button(parent, asset_server, "?");
-        build_button(parent, asset_server, "?");
-        build_button(parent, asset_server, "?");
+        build_button(parent, asset_server, "<--", TopBarBtnType::Back);
+        build_button(parent, asset_server, "?", TopBarBtnType::Other);
+        build_button(parent, asset_server, "?", TopBarBtnType::Other);
+        build_button(parent, asset_server, "?", TopBarBtnType::Other);
+        build_button(parent, asset_server, "?", TopBarBtnType::Other);
     });
 }
 
@@ -36,6 +44,7 @@ fn build_button(
     parent: &mut ChildBuilder<'_>,
     asset_server: &Res<AssetServer>,
     text: &str,
+    btn_type: TopBarBtnType,
 ) {
     parent
         .spawn((
@@ -53,6 +62,7 @@ fn build_button(
                 ..Default::default()
             },
             FarmHudObj,
+            TopBarBtn(btn_type),
         ))
         .with_children(|parent| {
             parent.spawn((
