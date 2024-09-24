@@ -4,47 +4,44 @@ use crate::game::farm::FarmHudObj;
 use crate::global::colors::CustomColors;
 
 #[derive(Component)]
-pub struct TopBarBtn(pub TopBarBtnType);
-
-pub enum TopBarBtnType {
+pub enum Action {
     Back,
     Other,
 }
 
-pub fn build(
-    parent: &mut ChildBuilder<'_>,
-    asset_server: &Res<AssetServer>,
-) {
-    parent.spawn((
-        NodeBundle {
-            background_color: Color::srgba(0.0, 0.0, 0.0, 0.65).into(),
-            border_radius: BorderRadius::all(Val::Px(10.0)),
-            style: Style {
-                width: Val::Vw(98.0),
-                height: Val::Vh(8.0),
-                margin: UiRect::all(Val::Vw(1.0)),
-                align_items: AlignItems::Center,
-                column_gap: Val::Vh(1.0),
-                padding: UiRect::left(Val::Vh(1.0)),
+pub fn build(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
+    parent
+        .spawn((
+            NodeBundle {
+                background_color: Color::srgba(0.0, 0.0, 0.0, 0.65).into(),
+                border_radius: BorderRadius::all(Val::Px(10.0)),
+                style: Style {
+                    width: Val::Vw(98.0),
+                    height: Val::Vh(8.0),
+                    margin: UiRect::all(Val::Vw(1.0)),
+                    align_items: AlignItems::Center,
+                    column_gap: Val::Vh(1.0),
+                    padding: UiRect::left(Val::Vh(1.0)),
+                    ..Default::default()
+                },
                 ..Default::default()
             },
-            ..Default::default()
-        },
-        FarmHudObj,
-    )).with_children(|parent| {
-        build_button(parent, asset_server, "<--", TopBarBtnType::Back);
-        build_button(parent, asset_server, "?", TopBarBtnType::Other);
-        build_button(parent, asset_server, "?", TopBarBtnType::Other);
-        build_button(parent, asset_server, "?", TopBarBtnType::Other);
-        build_button(parent, asset_server, "?", TopBarBtnType::Other);
-    });
+            FarmHudObj,
+        ))
+        .with_children(|parent| {
+            build_button(parent, asset_server, "<--", Action::Back);
+            build_button(parent, asset_server, "?", Action::Other);
+            build_button(parent, asset_server, "?", Action::Other);
+            build_button(parent, asset_server, "?", Action::Other);
+            build_button(parent, asset_server, "?", Action::Other);
+        });
 }
 
 fn build_button(
-    parent: &mut ChildBuilder<'_>,
+    parent: &mut ChildBuilder,
     asset_server: &Res<AssetServer>,
     text: &str,
-    btn_type: TopBarBtnType,
+    action: Action,
 ) {
     parent
         .spawn((
@@ -62,7 +59,7 @@ fn build_button(
                 ..Default::default()
             },
             FarmHudObj,
-            TopBarBtn(btn_type),
+            action,
         ))
         .with_children(|parent| {
             parent.spawn((

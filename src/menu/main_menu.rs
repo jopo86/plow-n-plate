@@ -1,18 +1,18 @@
 use bevy::prelude::*;
 
 use super::MenuObj;
-use crate::global::state::{Game, Menu, State};
 use crate::global::colors::CustomColors;
+use crate::global::state::{Game, Menu, AppState};
 
 pub struct MainMenuPlugin;
 
 impl Plugin for MainMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(State::Menu(Menu::Main)), sys_spawn_ui);
-        app.add_systems(OnExit(State::Menu(Menu::Main)), sys_despawn_ui);
+        app.add_systems(OnEnter(AppState::Menu(Menu::Main)), sys_spawn_ui);
+        app.add_systems(OnExit(AppState::Menu(Menu::Main)), sys_despawn_ui);
         app.add_systems(
             Update,
-            sys_buttons.run_if(in_state(State::Menu(Menu::Main))),
+            sys_interactions.run_if(in_state(AppState::Menu(Menu::Main))),
         );
     }
 }
@@ -20,7 +20,14 @@ impl Plugin for MainMenuPlugin {
 #[derive(Component)]
 struct MainMenuObj;
 
-fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) { //! kill me
+#[derive(Component)]
+enum Action {
+    Play,
+    Options,
+    Quit,
+}
+
+fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) {
     cmd.spawn((
         NodeBundle {
             style: Style {
@@ -57,105 +64,83 @@ fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) { //! kill me
             MainMenuObj,
         ));
 
-        parent
-            .spawn((
-                ButtonBundle {
-                    style: Style {
-                        width: Val::Auto,
-                        height: Val::Auto,
-                        padding: UiRect::axes(Val::Px(25.0), Val::Px(15.0)),
-                        justify_content: JustifyContent::Center,
-                        align_items: AlignItems::Center,
-                        ..Default::default()
-                    },
-                    background_color: Color::GRAY_0.into(),
-                    border_color: Color::BLACK.into(),
-                    border_radius: BorderRadius::all(Val::Px(10.0)),
-                    ..Default::default()
-                },
-                MenuObj,
-                MainMenuObj,
-            ))
-            .with_children(|parent| {
-                parent.spawn((
-                    TextBundle::from_section(
-                        "Play",
-                        TextStyle {
-                            color: Color::WHITE,
-                            font: asset_server.load("fonts/Main.ttf"),
-                            font_size: 48.0,
-                            ..Default::default()
-                        },
-                    ),
-                    MenuObj,
-                    MainMenuObj,
-                ));
-            });
-
-        parent
-            .spawn((
-                ButtonBundle {
-                    style: Style {
-                        width: Val::Auto,
-                        height: Val::Auto,
-                        padding: UiRect::axes(Val::Px(25.0), Val::Px(15.0)),
-                        justify_content: JustifyContent::Center,
-                        align_items: AlignItems::Center,
-                        ..Default::default()
-                    },
-                    background_color: Color::GRAY_0.into(),
-                    border_color: Color::BLACK.into(),
-                    border_radius: BorderRadius::all(Val::Px(10.0)),
-                    ..Default::default()
-                },
-                MenuObj,
-                MainMenuObj,
-            ))
-            .with_children(|parent| {
-                parent.spawn((
-                    TextBundle::from_section(
-                        "Options",
-                        TextStyle {
-                            color: Color::WHITE,
-                            font: asset_server.load("fonts/Main.ttf"),
-                            font_size: 48.0,
-                            ..Default::default()
-                        },
-                    ),
-                    MenuObj,
-                    MainMenuObj,
-                ));
-            });
+        build_button(parent, &asset_server, "Play", Action::Play);
+        build_button(parent, &asset_server, "Options", Action::Options);
+        build_button(parent, &asset_server, "Quit", Action::Quit);
     });
 }
 
-fn sys_despawn_ui(mut cmd: Commands, q_entities: Query<Entity, With<MainMenuObj>>) {
-    for e in q_entities.iter() {
+fn build_button(
+    parent: &mut ChildBuilder,
+    asset_server: &Res<AssetServer>,
+    text: &str,
+    action: Action,
+) {
+    parent
+        .spawn((
+            ButtonBundle {
+                style: Style {
+                    width: Val::Auto,
+                    height: Val::Auto,
+                    padding: UiRect::axes(Val::Px(25.0), Val::Px(15.0)),
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
+                    ..Default::default()
+                },
+                background_color: Color::GRAY_0.into(),
+                border_color: Color::BLACK.into(),
+                border_radius: BorderRadius::all(Val::Px(10.0)),
+                ..Default::default()
+            },
+            MenuObj,
+            MainMenuObj,
+            action,
+        ))
+        .with_children(|parent| {
+            parent.spawn((
+                TextBundle::from_section(
+                    text,
+                    TextStyle {
+                        color: Color::WHITE,
+                        font: asset_server.load("fonts/Main.ttf"),
+                        font_size: 48.0,
+                        ..Default::default()
+                    },
+                ),
+                MenuObj,
+                MainMenuObj,
+            ));
+        });
+}
+
+fn sys_despawn_ui(mut cmd: Commands, q_ui: Query<Entity, With<MainMenuObj>>) {
+    for e in &q_ui {
         cmd.entity(e).despawn();
     }
 }
 
-fn sys_buttons(
+fn sys_interactions(
     mut q_interaction: Query<
-        (&Interaction, &mut BackgroundColor, &Children),
+        (&Interaction, &mut BackgroundColor, &Action),
         (Changed<Interaction>, With<Button>),
     >,
-    q_text: Query<&Text>,
-    mut next_state: ResMut<NextState<State>>,
+    mut next_state: ResMut<NextState<AppState>>,
+    mut ew_exit: EventWriter<AppExit>,
 ) {
-    for (interaction, mut color, children) in q_interaction.iter_mut() {
-        let text = &q_text.get(children[0]).unwrap().sections[0].value[..];
-        match *interaction {
-            Interaction::Pressed => match text {
-                "Play" => next_state.set(State::Game(Game::Farm)),
-                "Options" => next_state.set(State::Menu(Menu::Options)),
-                _ => {}
+    for (interaction, mut bg_col, action) in q_interaction.iter_mut() {
+        match interaction {
+            Interaction::Pressed => match action {
+                Action::Play => next_state.set(AppState::Game(Game::Farm)),
+                Action::Options => next_state.set(AppState::Menu(Menu::Options)),
+                Action::Quit => {
+                    ew_exit.send(AppExit::Success);
+                }
             },
             Interaction::Hovered => {
-                *color = Color::GRAY_1.into();
+                *bg_col = Color::GRAY_1.into();
             }
             Interaction::None => {
-                *color = Color::GRAY_0.into();
+                *bg_col = Color::GRAY_0.into();
             }
         }
     }

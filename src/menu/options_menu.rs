@@ -1,24 +1,29 @@
 use bevy::prelude::*;
 
 use super::MenuObj;
-use crate::global::state::{Menu, State};
 use crate::global::colors::CustomColors;
+use crate::global::state::{Menu, AppState};
 
 pub struct OptionsMenuPlugin;
 
 impl Plugin for OptionsMenuPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(State::Menu(Menu::Options)), sys_spawn_ui);
-        app.add_systems(OnExit(State::Menu(Menu::Options)), sys_despawn_ui);
+        app.add_systems(OnEnter(AppState::Menu(Menu::Options)), sys_spawn_ui);
+        app.add_systems(OnExit(AppState::Menu(Menu::Options)), sys_despawn_ui);
         app.add_systems(
             Update,
-            sys_buttons.run_if(in_state(State::Menu(Menu::Options))),
+            sys_buttons.run_if(in_state(AppState::Menu(Menu::Options))),
         );
     }
 }
 
 #[derive(Component)]
 struct OptionsMenuObj;
+
+#[derive(Component)]
+enum Action {
+    Back,
+}
 
 fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) {
     cmd.spawn((
@@ -57,41 +62,51 @@ fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) {
             OptionsMenuObj,
         ));
 
-        parent
-            .spawn((
-                ButtonBundle {
-                    style: Style {
-                        width: Val::Auto,
-                        height: Val::Auto,
-                        padding: UiRect::axes(Val::Px(25.0), Val::Px(15.0)),
-                        justify_content: JustifyContent::Center,
-                        align_items: AlignItems::Center,
-                        ..Default::default()
-                    },
-                    background_color: Color::GRAY_0.into(),
-                    border_color: Color::BLACK.into(),
-                    border_radius: BorderRadius::all(Val::Px(10.0)),
+        build_button(parent, &asset_server, "Back", Action::Back);
+    });
+}
+
+fn build_button(
+    parent: &mut ChildBuilder,
+    asset_server: &Res<AssetServer>,
+    text: &str,
+    action: Action,
+) {
+    parent
+        .spawn((
+            ButtonBundle {
+                style: Style {
+                    width: Val::Auto,
+                    height: Val::Auto,
+                    padding: UiRect::axes(Val::Px(25.0), Val::Px(15.0)),
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
                     ..Default::default()
                 },
+                background_color: Color::GRAY_0.into(),
+                border_color: Color::BLACK.into(),
+                border_radius: BorderRadius::all(Val::Px(10.0)),
+                ..Default::default()
+            },
+            MenuObj,
+            OptionsMenuObj,
+            action,
+        ))
+        .with_children(|parent| {
+            parent.spawn((
+                TextBundle::from_section(
+                    text,
+                    TextStyle {
+                        color: Color::WHITE,
+                        font: asset_server.load("fonts/Main.ttf"),
+                        font_size: 48.0,
+                        ..Default::default()
+                    },
+                ),
                 MenuObj,
                 OptionsMenuObj,
-            ))
-            .with_children(|parent| {
-                parent.spawn((
-                    TextBundle::from_section(
-                        "Back",
-                        TextStyle {
-                            color: Color::WHITE,
-                            font: asset_server.load("fonts/Main.ttf"),
-                            font_size: 48.0,
-                            ..Default::default()
-                        },
-                    ),
-                    MenuObj,
-                    OptionsMenuObj,
-                ));
-            });
-    });
+            ));
+        });
 }
 
 fn sys_despawn_ui(mut cmd: Commands, q_entities: Query<Entity, With<OptionsMenuObj>>) {
@@ -102,18 +117,15 @@ fn sys_despawn_ui(mut cmd: Commands, q_entities: Query<Entity, With<OptionsMenuO
 
 fn sys_buttons(
     mut q_interaction: Query<
-        (&Interaction, &mut BackgroundColor, &Children),
+        (&Interaction, &mut BackgroundColor, &Action),
         (Changed<Interaction>, With<Button>),
     >,
-    q_text: Query<&Text>,
-    mut next_state: ResMut<NextState<State>>,
+    mut next_state: ResMut<NextState<AppState>>,
 ) {
-    for (interaction, mut color, children) in q_interaction.iter_mut() {
-        let text = &q_text.get(children[0]).unwrap().sections[0].value[..];
-        match *interaction {
-            Interaction::Pressed => match text {
-                "Back" => next_state.set(State::Menu(Menu::Main)),
-                _ => {}
+    for (interaction, mut color, action) in q_interaction.iter_mut() {
+        match interaction {
+            Interaction::Pressed => match action {
+                Action::Back => next_state.set(AppState::Menu(Menu::Main)),
             },
             Interaction::Hovered => {
                 *color = Color::GRAY_1.into();

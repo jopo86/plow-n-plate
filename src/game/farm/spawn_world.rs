@@ -3,19 +3,18 @@ use super::*;
 use bevy::prelude::*;
 
 use crate::game::{GameObj, SPRITE_SCALE};
-use crate::global::state::{Game, State};
+use crate::global::state::{Game, AppState};
 
 pub struct SpawnWorldPlugin;
 
 impl Plugin for SpawnWorldPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(OnEnter(State::Game(Game::Farm)), sys_spawn_world);
-        app.add_systems(OnExit(State::Game(Game::Farm)), sys_despawn_world);
+        app.add_systems(OnEnter(AppState::Game(Game::Farm)), sys_spawn_world);
+        app.add_systems(OnExit(AppState::Game(Game::Farm)), sys_despawn_world);
     }
 }
 
 fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
-
     for i in -20..=20 {
         for j in -20..=20 {
             if (-1..=1).contains(&i) && (-1..=1).contains(&j) {
@@ -48,10 +47,7 @@ fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
     }
 }
 
-fn sys_despawn_world(
-    mut cmd: Commands,
-    q_world: Query<Entity, With<FarmGameObj>>,
-) {
+fn sys_despawn_world(mut cmd: Commands, q_world: Query<Entity, With<FarmGameObj>>) {
     for e in &q_world {
         cmd.entity(e).despawn();
     }

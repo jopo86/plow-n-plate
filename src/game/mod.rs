@@ -3,8 +3,6 @@ mod kitchen;
 
 use bevy::prelude::*;
 
-use crate::global::state::State;
-
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {

@@ -1,18 +1,18 @@
 use bevy::state::state::States;
 
-#[derive(States, Debug, Clone, PartialEq, Eq, Hash)] // have to include this crap for states (except Default)
-pub enum State {
+#[derive(States, Debug, Clone, PartialEq, Eq, Hash)]
+pub enum AppState {
     Menu(Menu),
     Game(Game),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)] //* not a state!
 pub enum Menu {
     Main,
     Options,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)] //* also not a state!
 pub enum Game {
     Farm,
     Kitchen,

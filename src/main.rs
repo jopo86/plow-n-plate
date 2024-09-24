@@ -3,7 +3,7 @@ mod global;
 mod menu;
 
 use bevy::prelude::*;
-use global::state::{Menu, State};
+use global::state::{Menu, AppState};
 
 /*
  * CONVENTIONS (for systems) (this may get annoying idk)
@@ -19,7 +19,7 @@ use global::state::{Menu, State};
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
-        .insert_state(State::Menu(Menu::Main))
+        .insert_state(AppState::Menu(Menu::Main))
         .add_plugins((global::GlobalPlugin, game::GamePlugin, menu::MenuPlugin))
         .run();
 }

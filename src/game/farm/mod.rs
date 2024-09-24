@@ -1,9 +1,9 @@
 mod hud;
-mod spawn_world;
 mod move_world;
+mod spawn_world;
 
-use bevy::prelude::*;
 use super::GameObj;
+use bevy::prelude::*;
 
 pub struct FarmPlugin;
 

@@ -1,8 +1,12 @@
-use bevy::{input::mouse::{MouseScrollUnit, MouseWheel}, prelude::*, window::PrimaryWindow};
+use bevy::{
+    input::mouse::{MouseScrollUnit, MouseWheel},
+    prelude::*,
+    window::PrimaryWindow,
+};
 
 use crate::game::GameObj;
 use crate::global::resources::MousePos;
-use crate::global::state::{State, Game};
+use crate::global::state::{Game, AppState};
 
 pub struct MoveWorldPlugin;
 
@@ -10,7 +14,7 @@ impl Plugin for MoveWorldPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(
             Update,
-            (sys_move_with_mouse, sys_scale_with_scroll).run_if(in_state(State::Game(Game::Farm))),
+            (sys_move_with_mouse, sys_scale_with_scroll).run_if(in_state(AppState::Game(Game::Farm))),
         );
     }
 }
