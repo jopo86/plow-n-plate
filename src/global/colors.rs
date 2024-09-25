@@ -8,9 +8,9 @@ pub trait CustomColors {
     const BLUE: Color;
     const PURPLE: Color;
 
-    const GRAY_0: Color;
-    const GRAY_1: Color;
-    const GRAY_2: Color;
+    const FG_NORMAL: Color;
+    const FG_HOVER: Color;
+    const BG: Color;
 
     const TRANSPARENT: Color;
 }
@@ -23,9 +23,9 @@ impl CustomColors for Color {
     const BLUE: Color = Color::srgb(0.1, 0.1, 0.8);
     const PURPLE: Color = Color::srgb(0.8, 0.1, 0.8);
 
-    const GRAY_0: Color = Color::srgb(0.1, 0.1, 0.1);
-    const GRAY_1: Color = Color::srgb(0.15, 0.15, 0.15);
-    const GRAY_2: Color = Color::srgb(0.2, 0.2, 0.2);
+    const FG_NORMAL: Color = Color::srgb(0.1, 0.1, 0.1);
+    const FG_HOVER: Color = Color::srgb(0.15, 0.15, 0.15);
+    const BG: Color = Color::srgb(0.2, 0.2, 0.2);
 
     const TRANSPARENT: Color = Color::srgba(0.0, 0.0, 0.0, 0.0);
 }

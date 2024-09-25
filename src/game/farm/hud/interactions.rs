@@ -30,11 +30,11 @@ fn sys_top_bar_interactions(
     for (interaction, mut bg_col, action) in &mut q_buttons {
         match interaction {
             Interaction::Pressed => match action {
-                Action::Back => next_state.set(AppState::Menu(Menu::Main)),
+                Action::Home => next_state.set(AppState::Menu(Menu::Main)),
                 _ => {}
             },
-            Interaction::Hovered => *bg_col = Color::GRAY_1.into(),
-            Interaction::None => *bg_col = Color::GRAY_0.into(),
+            Interaction::Hovered => *bg_col = Color::FG_HOVER.into(),
+            Interaction::None => *bg_col = Color::FG_NORMAL.into(),
         }
     }
 }

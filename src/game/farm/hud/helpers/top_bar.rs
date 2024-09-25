@@ -5,7 +5,7 @@ use crate::global::colors::CustomColors;
 
 #[derive(Component)]
 pub enum Action {
-    Back,
+    Home,
     Other,
 }
 
@@ -29,7 +29,7 @@ pub fn build(parent: &mut ChildBuilder, assets: &Res<AssetServer>) {
             FarmHudObj,
         ))
         .with_children(|parent| {
-            build_img_button(parent, assets, "icons/3.png", Action::Back);
+            build_img_button(parent, assets, "icons/3.png", Action::Home);
             build_text_button(parent, assets, "?", Action::Other);
             build_text_button(parent, assets, "?", Action::Other);
             build_text_button(parent, assets, "?", Action::Other);
@@ -53,7 +53,7 @@ fn build_text_button(
                     align_items: AlignItems::Center,
                     ..Default::default()
                 },
-                background_color: Color::GRAY_0.into(),
+                background_color: Color::FG_NORMAL.into(),
                 border_color: Color::BLACK.into(),
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 ..Default::default()
@@ -93,7 +93,7 @@ fn build_img_button(
                     align_items: AlignItems::Center,
                     ..Default::default()
                 },
-                background_color: Color::GRAY_0.into(),
+                background_color: Color::FG_NORMAL.into(),
                 border_color: Color::BLACK.into(),
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 ..Default::default()

@@ -37,7 +37,7 @@ fn sys_spawn_ui(mut cmd: Commands, assets: Res<AssetServer>) {
                 align_items: AlignItems::Center,
                 ..Default::default()
             },
-            background_color: Color::GRAY_2.into(),
+            background_color: Color::BG.into(),
             ..Default::default()
         },
         MenuObj,
@@ -83,7 +83,7 @@ fn build_button(
                     align_items: AlignItems::Center,
                     ..Default::default()
                 },
-                background_color: Color::GRAY_0.into(),
+                background_color: Color::FG_NORMAL.into(),
                 border_color: Color::BLACK.into(),
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 ..Default::default()
@@ -127,12 +127,8 @@ fn sys_buttons(
             Interaction::Pressed => match action {
                 Action::Back => next_state.set(AppState::Menu(Menu::Main)),
             },
-            Interaction::Hovered => {
-                *color = Color::GRAY_1.into();
-            }
-            Interaction::None => {
-                *color = Color::GRAY_0.into();
-            }
+            Interaction::Hovered => *color = Color::FG_HOVER.into(),
+            Interaction::None => *color = Color::FG_NORMAL.into(),
         }
     }
 }
