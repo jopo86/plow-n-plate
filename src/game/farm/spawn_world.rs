@@ -14,7 +14,7 @@ impl Plugin for SpawnWorldPlugin {
     }
 }
 
-fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
+fn sys_spawn_world(mut cmd: Commands, assets: Res<AssetServer>) {
     for i in -20..=20 {
         for j in -20..=20 {
             if (-1..=1).contains(&i) && (-1..=1).contains(&j) {
@@ -24,7 +24,7 @@ fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 PlotType::Grass,
                 Vec3::new(i as f32, j as f32, 0.0),
                 &mut cmd,
-                &asset_server,
+                &assets,
             );
         }
     }
@@ -35,13 +35,13 @@ fn sys_spawn_world(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 PlotType::Dirt,
                 Vec3::new(i as f32, j as f32, 0.0),
                 &mut cmd,
-                &asset_server,
+                &assets,
             );
             spawn_crop(
                 CropType::Wheat,
                 Vec3::new(i as f32, j as f32, 1.0),
                 &mut cmd,
-                &asset_server,
+                &assets,
             );
         }
     }
@@ -58,13 +58,13 @@ fn spawn_plot(
     plot_type: PlotType,
     mut pos: Vec3,
     cmd: &mut Commands,
-    asset_server: &Res<AssetServer>,
+    assets: &Res<AssetServer>,
 ) {
     pos *= 16.0 * SPRITE_SCALE;
 
     cmd.spawn(PlotBundle(
         SpriteBundle {
-            texture: asset_server.load(match plot_type {
+            texture: assets.load(match plot_type {
                 PlotType::Dirt => "textures/dirt.png",
                 PlotType::Grass => "textures/grass.png",
             }),
@@ -83,14 +83,14 @@ fn spawn_crop(
     crop_type: CropType,
     mut pos: Vec3,
     cmd: &mut Commands,
-    asset_server: &Res<AssetServer>,
+    assets: &Res<AssetServer>,
 ) {
     pos *= 16.0 * SPRITE_SCALE;
     pos.y += 8.0 * SPRITE_SCALE; // account for 16x32 texture, we want the origin to be 1/4 up, not the center
 
     cmd.spawn(CropBundle(
         SpriteBundle {
-            texture: asset_server.load(match crop_type {
+            texture: assets.load(match crop_type {
                 CropType::Wheat => "textures/wheat.png",
             }),
             transform: Transform::from_xyz(pos.x, pos.y, pos.z)

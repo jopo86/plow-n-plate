@@ -9,7 +9,7 @@ pub enum Action {
     Other,
 }
 
-pub fn build(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
+pub fn build(parent: &mut ChildBuilder, assets: &Res<AssetServer>) {
     parent
         .spawn((
             NodeBundle {
@@ -29,17 +29,17 @@ pub fn build(parent: &mut ChildBuilder, asset_server: &Res<AssetServer>) {
             FarmHudObj,
         ))
         .with_children(|parent| {
-            build_button(parent, asset_server, "<--", Action::Back);
-            build_button(parent, asset_server, "?", Action::Other);
-            build_button(parent, asset_server, "?", Action::Other);
-            build_button(parent, asset_server, "?", Action::Other);
-            build_button(parent, asset_server, "?", Action::Other);
+            build_img_button(parent, assets, "icons/3.png", Action::Back);
+            build_text_button(parent, assets, "?", Action::Other);
+            build_text_button(parent, assets, "?", Action::Other);
+            build_text_button(parent, assets, "?", Action::Other);
+            build_text_button(parent, assets, "?", Action::Other);
         });
 }
 
-fn build_button(
+fn build_text_button(
     parent: &mut ChildBuilder,
-    asset_server: &Res<AssetServer>,
+    assets: &Res<AssetServer>,
     text: &str,
     action: Action,
 ) {
@@ -67,11 +67,47 @@ fn build_button(
                     text,
                     TextStyle {
                         color: Color::WHITE,
-                        font: asset_server.load("fonts/Main.ttf"),
+                        font: assets.load("fonts/Main.ttf"),
                         font_size: 24.0,
                         ..Default::default()
                     },
                 ),
+                FarmHudObj,
+            ));
+        });
+}
+
+fn build_img_button(
+    parent: &mut ChildBuilder,
+    assets: &Res<AssetServer>,
+    img_path: &'static str,
+    action: Action,
+) {
+    parent
+        .spawn((
+            ButtonBundle {
+                style: Style {
+                    width: Val::Vh(6.0),
+                    height: Val::Vh(6.0),
+                    justify_content: JustifyContent::Center,
+                    align_items: AlignItems::Center,
+                    ..Default::default()
+                },
+                background_color: Color::GRAY_0.into(),
+                border_color: Color::BLACK.into(),
+                border_radius: BorderRadius::all(Val::Px(10.0)),
+                ..Default::default()
+            },
+            FarmHudObj,
+            action,
+        ))
+        .with_children(|parent| {
+            parent.spawn((
+                ImageBundle {
+                    image: UiImage::new(assets.load(img_path)),
+                    transform: Transform::from_scale(Vec3::splat(2.0)),
+                    ..Default::default()
+                },
                 FarmHudObj,
             ));
         });

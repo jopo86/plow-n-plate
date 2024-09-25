@@ -19,7 +19,7 @@ impl Plugin for SpawnHudPlugin {
     }
 }
 
-fn sys_spawn_hud(mut cmd: Commands, asset_server: Res<AssetServer>) {
+fn sys_spawn_hud(mut cmd: Commands, assets: Res<AssetServer>) {
     cmd.spawn((
         NodeBundle {
             background_color: Color::TRANSPARENT.into(),
@@ -35,7 +35,7 @@ fn sys_spawn_hud(mut cmd: Commands, asset_server: Res<AssetServer>) {
         FarmHudObj,
     ))
     .with_children(|parent| {
-        top_bar::build(parent, &asset_server);
+        top_bar::build(parent, &assets);
     });
 }
 

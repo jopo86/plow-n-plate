@@ -4,12 +4,6 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use super::resources::*;
 
-pub fn sys_close_if_esc(kbd: Res<ButtonInput<KeyCode>>, mut ew_exit: EventWriter<AppExit>) {
-    if kbd.just_pressed(KeyCode::Escape) {
-        ew_exit.send(AppExit::Success);
-    }
-}
-
 pub fn sys_spawn_camera(mut cmd: Commands) {
     cmd.spawn(Camera2dBundle::default());
 }

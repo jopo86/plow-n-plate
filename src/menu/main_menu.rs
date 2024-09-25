@@ -27,7 +27,7 @@ enum Action {
     Quit,
 }
 
-fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) {
+fn sys_spawn_ui(mut cmd: Commands, assets: Res<AssetServer>) {
     cmd.spawn((
         NodeBundle {
             style: Style {
@@ -51,7 +51,7 @@ fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) {
                 "Plow n' Plate",
                 TextStyle {
                     color: Color::WHITE,
-                    font: asset_server.load("fonts/Main.ttf"),
+                    font: assets.load("fonts/Main.ttf"),
                     font_size: 96.0,
                     ..Default::default()
                 },
@@ -64,15 +64,15 @@ fn sys_spawn_ui(mut cmd: Commands, asset_server: Res<AssetServer>) {
             MainMenuObj,
         ));
 
-        build_button(parent, &asset_server, "Play", Action::Play);
-        build_button(parent, &asset_server, "Options", Action::Options);
-        build_button(parent, &asset_server, "Quit", Action::Quit);
+        build_button(parent, &assets, "Play", Action::Play);
+        build_button(parent, &assets, "Options", Action::Options);
+        build_button(parent, &assets, "Quit", Action::Quit);
     });
 }
 
 fn build_button(
     parent: &mut ChildBuilder,
-    asset_server: &Res<AssetServer>,
+    assets: &Res<AssetServer>,
     text: &str,
     action: Action,
 ) {
@@ -102,7 +102,7 @@ fn build_button(
                     text,
                     TextStyle {
                         color: Color::WHITE,
-                        font: asset_server.load("fonts/Main.ttf"),
+                        font: assets.load("fonts/Main.ttf"),
                         font_size: 48.0,
                         ..Default::default()
                     },
