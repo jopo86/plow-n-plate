@@ -1,9 +1,15 @@
-use bevy::state::state::States;
+use bevy::prelude::*;
 
 #[derive(States, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AppState {
     Menu(Menu),
     Game(Game),
+}
+
+impl Default for AppState {
+    fn default() -> Self {
+        Self::Menu(Menu::Main)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)] //* not a state!
@@ -16,6 +22,10 @@ pub enum Menu {
 pub enum Game {
     Farm,
     Kitchen,
+}
+
+pub fn in_game_state(state: Res<State<AppState>>) -> bool {
+    matches!(**state, AppState::Game(_))
 }
 
 /*

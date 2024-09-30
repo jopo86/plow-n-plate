@@ -4,6 +4,9 @@ use crate::game::farm::FarmHudObj;
 use crate::global::colors::CustomColors;
 use crate::global::resources;
 
+#[derive(Component)]
+pub struct InventoryNode;
+
 pub fn build(cmd: &mut Commands, assets: &Res<AssetServer>) {
     cmd.spawn((
         NodeBundle {
@@ -13,11 +16,13 @@ pub fn build(cmd: &mut Commands, assets: &Res<AssetServer>) {
                 height: Val::Percent(100.0),
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
+                display: Display::None,
                 ..Default::default()
             },
             ..Default::default()
         },
         FarmHudObj,
+        InventoryNode,
     ))
     .with_children(|parent| {
         parent.spawn((

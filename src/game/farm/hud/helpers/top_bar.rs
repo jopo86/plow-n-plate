@@ -53,8 +53,7 @@ fn build_text_button(
                     align_items: AlignItems::Center,
                     ..Default::default()
                 },
-                background_color: Color::FG_NORMAL.into(),
-                border_color: Color::BLACK.into(),
+                background_color: Color::HUD.into(),
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 ..Default::default()
             },
@@ -93,8 +92,7 @@ fn build_img_button(
                     align_items: AlignItems::Center,
                     ..Default::default()
                 },
-                background_color: Color::FG_NORMAL.into(),
-                border_color: Color::BLACK.into(),
+                background_color: Color::HUD.into(),
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 ..Default::default()
             },

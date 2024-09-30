@@ -13,6 +13,7 @@ pub trait CustomColors {
     const BG: Color;
 
     const HUD: Color;
+    const HUD_HOVER: Color;
 
     const TRANSPARENT: Color;
 }
@@ -30,6 +31,7 @@ impl CustomColors for Color {
     const BG: Color = Color::srgb(0.2, 0.2, 0.2);
 
     const HUD: Color = Color::srgba(0.0, 0.0, 0.0, 0.65);
+    const HUD_HOVER: Color = Color::srgba(0.0, 0.0, 0.0, 0.5);
 
     const TRANSPARENT: Color = Color::srgba(0.0, 0.0, 0.0, 0.0);
 }

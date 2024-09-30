@@ -26,7 +26,7 @@ impl Item {
 }
 
 #[derive(Resource)]
-struct Inventory(HashMap<Item, i32>);
+struct Inventory(pub HashMap<Item, i32>);
 
 impl Default for Inventory {
     fn default() -> Self {
