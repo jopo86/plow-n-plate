@@ -12,7 +12,7 @@ pub trait CustomColors {
     const FG_HOVER: Color;
     const BG: Color;
 
-    const HUD_TRANSLUCENT: Color;
+    const HUD: Color;
 
     const TRANSPARENT: Color;
 }
@@ -29,7 +29,7 @@ impl CustomColors for Color {
     const FG_HOVER: Color = Color::srgb(0.15, 0.15, 0.15);
     const BG: Color = Color::srgb(0.2, 0.2, 0.2);
 
-    const HUD_TRANSLUCENT: Color = Color::srgba(0.0, 0.0, 0.0, 0.65);
+    const HUD: Color = Color::srgba(0.0, 0.0, 0.0, 0.65);
 
     const TRANSPARENT: Color = Color::srgba(0.0, 0.0, 0.0, 0.0);
 }

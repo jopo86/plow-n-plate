@@ -36,8 +36,9 @@ fn sys_spawn_hud(mut cmd: Commands, assets: Res<AssetServer>) {
     ))
     .with_children(|parent| {
         top_bar::build(parent, &assets);
-        inventory::build(parent, &assets);
     });
+
+    inventory::build(&mut cmd, &assets);
 }
 
 fn sys_despawn_hud(mut cmd: Commands, q_hud: Query<Entity, With<FarmHudObj>>) {
