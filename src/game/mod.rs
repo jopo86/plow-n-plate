@@ -1,5 +1,6 @@
 mod farm;
 mod kitchen;
+mod inventory;
 
 use bevy::prelude::*;
 
@@ -7,7 +8,7 @@ pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((farm::FarmPlugin, kitchen::KitchenPlugin));
+        app.add_plugins((farm::FarmPlugin, kitchen::KitchenPlugin, inventory::InventoryPlugin));
     }
 }
 

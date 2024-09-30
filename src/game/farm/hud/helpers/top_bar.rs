@@ -13,7 +13,7 @@ pub fn build(parent: &mut ChildBuilder, assets: &Res<AssetServer>) {
     parent
         .spawn((
             NodeBundle {
-                background_color: Color::srgba(0.0, 0.0, 0.0, 0.65).into(),
+                background_color: Color::HUD_TRANSLUCENT.into(),
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 style: Style {
                     width: Val::Vw(98.0),

@@ -8,7 +8,7 @@ use crate::{
     },
 };
 
-use super::helpers::top_bar;
+use super::helpers::{top_bar, inventory};
 
 pub struct SpawnHudPlugin;
 
@@ -36,6 +36,7 @@ fn sys_spawn_hud(mut cmd: Commands, assets: Res<AssetServer>) {
     ))
     .with_children(|parent| {
         top_bar::build(parent, &assets);
+        inventory::build(parent, &assets);
     });
 }
 
