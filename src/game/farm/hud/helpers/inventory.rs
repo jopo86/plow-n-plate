@@ -34,7 +34,10 @@ pub fn build(cmd: &mut Commands, assets: &Res<AssetServer>) {
                     height: Val::Auto,
                     flex_direction: FlexDirection::Column,
                     align_items: AlignItems::Center,
-                    padding: UiRect::all(Val::Px(10.0)),
+                    align_content: AlignContent::SpaceBetween,
+                    justify_content: JustifyContent::SpaceBetween,
+                    padding: UiRect::all(Val::Px(6.0)),
+                    row_gap: Val::Px(4.0),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -42,6 +45,22 @@ pub fn build(cmd: &mut Commands, assets: &Res<AssetServer>) {
             FarmHudObj,
         ))
         .with_children(|parent| {
+            parent.spawn((
+                TextBundle::from_section(
+                    "Inventory",
+                    TextStyle {
+                        font: assets.load("fonts/main.ttf"),
+                        color: Color::WHITE,
+                        font_size: 24.0,
+                    },
+                ).with_style(
+                    Style {
+                        margin: UiRect::all(Val::Px(5.0)),
+                        ..Default::default()
+                    }
+                ),
+                FarmHudObj,
+            ));
             for _ in 0..3 {
                 build_slot_row(parent, assets);
             }
@@ -59,6 +78,7 @@ fn build_slot_row(
             style: Style {
                 width: Val::Percent(98.0),
                 height: Val::Px(44.0),
+                column_gap: Val::Px(4.0),
                 ..Default::default()
             },
             ..Default::default()
@@ -77,13 +97,12 @@ fn build_slot(
     assets: &Res<AssetServer>,
 ) {
     parent.spawn((
-        NodeBundle {
+        ButtonBundle {
             background_color: Color::HUD.into(),
             border_radius: BorderRadius::all(Val::Px(4.0)),
             style: Style {
                 width: Val::Px(40.0),
                 height: Val::Px(40.0),
-                margin: UiRect::all(Val::Px(2.0)),
                 ..Default::default()
             },
             ..Default::default()

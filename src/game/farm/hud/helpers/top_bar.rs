@@ -17,11 +17,11 @@ pub fn build(parent: &mut ChildBuilder, assets: &Res<AssetServer>) {
                 border_radius: BorderRadius::all(Val::Px(10.0)),
                 style: Style {
                     width: Val::Vw(98.0),
-                    height: Val::Vh(8.0),
-                    margin: UiRect::all(Val::Vw(1.0)),
+                    height: Val::Auto,
+                    margin: UiRect::all(Val::Px(10.0)),
                     align_items: AlignItems::Center,
-                    column_gap: Val::Vh(1.0),
-                    padding: UiRect::left(Val::Vh(1.0)),
+                    padding: UiRect::all(Val::Px(6.0)),
+                    column_gap: Val::Px(10.0),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -47,8 +47,8 @@ fn build_text_button(
         .spawn((
             ButtonBundle {
                 style: Style {
-                    width: Val::Vh(6.0),
-                    height: Val::Vh(6.0),
+                    width: Val::Px(40.0),
+                    height: Val::Px(40.0),
                     justify_content: JustifyContent::Center,
                     align_items: AlignItems::Center,
                     ..Default::default()
@@ -86,8 +86,8 @@ fn build_img_button(
         .spawn((
             ButtonBundle {
                 style: Style {
-                    width: Val::Vh(6.0),
-                    height: Val::Vh(6.0),
+                    width: Val::Px(40.0),
+                    height: Val::Px(40.0),
                     justify_content: JustifyContent::Center,
                     align_items: AlignItems::Center,
                     ..Default::default()
