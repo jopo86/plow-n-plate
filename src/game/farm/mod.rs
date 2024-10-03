@@ -1,5 +1,5 @@
 mod hud;
-mod move_world;
+mod interact_world;
 mod spawn_world;
 
 use super::GameObj;
@@ -11,7 +11,7 @@ impl Plugin for FarmPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
             spawn_world::SpawnWorldPlugin,
-            move_world::MoveWorldPlugin,
+            interact_world::InteractWorldPlugin,
             hud::HudPlugin,
         ));
     }

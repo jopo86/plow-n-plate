@@ -6,6 +6,7 @@ pub struct MousePos {
     pub y: f32,
     pub dx: f32,
     pub dy: f32,
+    pub world: Vec3,
 }
 
 impl Default for MousePos {
@@ -15,6 +16,7 @@ impl Default for MousePos {
             y: 0.0,
             dx: 0.0,
             dy: 0.0,
+            world: Vec3::splat(0.0),
         }
     }
 }
