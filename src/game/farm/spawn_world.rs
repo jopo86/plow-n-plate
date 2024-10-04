@@ -3,7 +3,7 @@ use super::*;
 use bevy::prelude::*;
 
 use crate::game::{GameObj, SPRITE_SCALE};
-use crate::global::state::{Game, AppState};
+use crate::global::state::{AppState, Game};
 
 pub struct SpawnWorldPlugin;
 
@@ -74,7 +74,7 @@ fn spawn_plot(
         },
         GameObj,
         FarmGameObj,
-        Plot,
+        plot_type,
     ));
 }
 
@@ -99,6 +99,6 @@ fn spawn_crop(
         },
         GameObj,
         FarmGameObj,
-        Crop,
+        crop_type,
     ));
 }

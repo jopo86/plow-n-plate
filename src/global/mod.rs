@@ -1,7 +1,8 @@
 pub mod colors;
+pub mod keybinds;
+pub mod math;
 pub mod resources;
 pub mod state;
-pub mod keybinds;
 mod systems;
 
 use bevy::prelude::*;

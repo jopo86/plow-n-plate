@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use super::MenuObj;
 use crate::global::colors::CustomColors;
-use crate::global::state::{Menu, AppState};
+use crate::global::state::{AppState, Menu};
 
 pub struct OptionsMenuPlugin;
 
@@ -66,12 +66,7 @@ fn sys_spawn_ui(mut cmd: Commands, assets: Res<AssetServer>) {
     });
 }
 
-fn build_button(
-    parent: &mut ChildBuilder,
-    assets: &Res<AssetServer>,
-    text: &str,
-    action: Action,
-) {
+fn build_button(parent: &mut ChildBuilder, assets: &Res<AssetServer>, text: &str, action: Action) {
     parent
         .spawn((
             ButtonBundle {

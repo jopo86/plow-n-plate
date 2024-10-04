@@ -4,11 +4,11 @@ use crate::{
     game::farm::FarmHudObj,
     global::{
         colors::CustomColors,
-        state::{Game, AppState},
+        state::{AppState, Game},
     },
 };
 
-use super::helpers::{top_bar, inventory};
+use super::helpers::{inventory, top_bar};
 
 pub struct SpawnHudPlugin;
 
