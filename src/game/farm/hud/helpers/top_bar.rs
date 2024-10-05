@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use crate::game::farm::FarmHudObj;
+use crate::global::assets::fonts;
 use crate::global::colors::CustomColors;
 
 #[derive(Component)]
@@ -66,7 +67,7 @@ fn build_text_button(
                     text,
                     TextStyle {
                         color: Color::WHITE,
-                        font: assets.load("fonts/Main.ttf"),
+                        font: assets.load(fonts::MAIN),
                         font_size: 24.0,
                         ..Default::default()
                     },

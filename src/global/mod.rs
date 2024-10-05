@@ -1,3 +1,4 @@
+pub mod assets;
 pub mod colors;
 pub mod keybinds;
 pub mod math;

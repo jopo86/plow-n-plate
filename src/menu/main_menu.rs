@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use super::MenuObj;
+use crate::global::assets::fonts;
 use crate::global::colors::CustomColors;
 use crate::global::state::{AppState, Game, Menu};
 
@@ -51,7 +52,7 @@ fn sys_spawn_ui(mut cmd: Commands, assets: Res<AssetServer>) {
                 "Plow n' Plate",
                 TextStyle {
                     color: Color::WHITE,
-                    font: assets.load("fonts/Main.ttf"),
+                    font: assets.load(fonts::MAIN),
                     font_size: 96.0,
                     ..Default::default()
                 },
@@ -97,7 +98,7 @@ fn build_button(parent: &mut ChildBuilder, assets: &Res<AssetServer>, text: &str
                     text,
                     TextStyle {
                         color: Color::WHITE,
-                        font: assets.load("fonts/Main.ttf"),
+                        font: assets.load(fonts::MAIN),
                         font_size: 48.0,
                         ..Default::default()
                     },
