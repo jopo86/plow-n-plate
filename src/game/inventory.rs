@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use std::collections::HashMap;
 
-use crate::global::state::in_game_state;
+use crate::global::state::{in_game_state, AppState, Game};
 
 use super::farm::InventorySlotHudObj;
 
@@ -10,9 +10,11 @@ pub struct InventoryPlugin;
 
 impl Plugin for InventoryPlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<Inventory>();
-        app.add_systems(Startup, sys_fill_inventory);
-        app.add_systems(Update, sys_update_inventory.run_if(in_game_state));
+        app.init_resource::<Inventory>()
+            .add_systems(Startup, sys_fill_inventory)
+            .add_systems(Update, sys_update_inventory.run_if(in_game_state))
+            .add_systems(OnEnter(AppState::Game(Game::Farm)), sys_prompt_inventory_update)
+            .add_systems(OnEnter(AppState::Game(Game::Kitchen)), sys_prompt_inventory_update);
     }
 }
 
@@ -74,14 +76,14 @@ fn sys_fill_inventory(mut inventory: ResMut<Inventory>) {
 fn sys_update_inventory(
     inventory: Res<Inventory>,
     assets: Res<AssetServer>,
-    mut q_slots: Query<(&mut Children, &mut UiImage), With<InventorySlotHudObj>>,
+    mut q_slots: Query<(&Children, &mut UiImage), With<InventorySlotHudObj>>,
     mut q_text: Query<&mut Text>,
 ) {
     if !inventory.is_changed() {
         return;
     }
 
-    for ((item, count), (mut children, mut img)) in inventory.0.iter().zip(q_slots.iter_mut()) {
+    for ((item, count), (children, mut img)) in inventory.0.iter().zip(q_slots.iter_mut()) {
         if *count == 0 {
             continue;
         }
@@ -89,4 +91,10 @@ fn sys_update_inventory(
         *img = UiImage::new(assets.load(item.get_texture_path()));
         q_text.get_mut(children[0]).unwrap().sections[0].value = count.to_string();
     }
+}
+
+fn sys_prompt_inventory_update(mut inventory: ResMut<Inventory>) {
+    // hacky but it works since it changes the inventory
+    inventory.add(Item::Wheat, 1);
+    inventory.take(Item::Wheat, 1);
 }
