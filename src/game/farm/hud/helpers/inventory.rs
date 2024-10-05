@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::game::farm::{FarmHudObj, InventorySlotHudObj};
 use crate::global::colors::CustomColors;
-use crate::global::resources;
 
 #[derive(Component)]
 pub struct InventoryNode;
@@ -121,16 +120,20 @@ fn build_slot(parent: &mut ChildBuilder, assets: &Res<AssetServer>) {
                         },
                         ..Default::default()
                     },
+                    FarmHudObj,
                     InventorySlotHudObj,
                 ))
                 .with_children(|parent| {
-                    parent.spawn(TextBundle::from_section(
-                        " ",
-                        TextStyle {
-                            color: Color::WHITE,
-                            font: assets.load("fonts/main.ttf"),
-                            font_size: 18.0,
-                        },
+                    parent.spawn((
+                        TextBundle::from_section(
+                            "",
+                            TextStyle {
+                                color: Color::WHITE,
+                                font: assets.load("fonts/main.ttf"),
+                                font_size: 16.0,
+                            },
+                        ),
+                        FarmHudObj,
                     ));
                 });
         });
