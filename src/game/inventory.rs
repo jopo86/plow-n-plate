@@ -23,7 +23,7 @@ impl Item {
 
     pub fn get_texture_path(&self) -> &'static str {
         match self {
-            Self::Wheat => "textures/wheat.png",
+            Self::Wheat => "textures/wheat_icon.png",
             // ...
         }
     }
