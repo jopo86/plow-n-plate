@@ -3,11 +3,11 @@ use bevy::{
     prelude::*,
 };
 
-use super::{CropType, PlotType, WorldScale};
-use crate::game::{
+use super::{CropBundle, CropType, PlotType, WorldScale};
+use crate::{game::{
     inventory::{Inventory, Item},
     GameObj, SPRITE_SCALE,
-};
+}, global::{assets::textures::{crops, plots}, keybinds::{Action, Keybinds}}};
 use crate::global::{
     math,
     resources::MousePos,
@@ -45,9 +45,15 @@ impl Plugin for InteractWorldPlugin {
 fn sys_move_with_mouse(
     mut q_plots_and_crops: Query<&mut Transform, With<GameObj>>,
     mouse_button: Res<ButtonInput<MouseButton>>,
+    kbd: Res<ButtonInput<KeyCode>>,
+    keybinds: Res<Keybinds>,
     mouse_pos: Res<MousePos>,
     mut drag_timer: ResMut<DragTimer>,
 ) {
+    if kbd.pressed(keybinds.get(Action::LockCamera)) {
+        return;
+    }
+
     if (mouse_button.pressed(MouseButton::Left) || mouse_button.pressed(MouseButton::Right))
         && (mouse_pos.dx != 0.0 || mouse_pos.dy != 0.0)
     {
@@ -103,35 +109,57 @@ fn sys_click(
     mouse_pos: Res<MousePos>,
     drag_timer: Res<DragTimer>,
     world_scale: Res<WorldScale>,
+    assets: Res<AssetServer>,
     mut inventory: ResMut<Inventory>,
     q_crops: Query<(Entity, &Transform, &CropType)>,
     q_plots: Query<(Entity, &Transform, &PlotType)>,
 ) {
-    if mouse_btn.just_released(MouseButton::Left) && drag_timer.0.finished() {
+    if !(mouse_btn.just_released(MouseButton::Left) && drag_timer.0.finished()) {
         // only register clicks if world wasn't being dragged
-        for (e, transform, crop_type) in &q_crops {
-            if math::pt_rect_collision(
-                mouse_pos.world.xy(),
-                transform.translation.xy() - Vec2::new(0.0, 8.0 * SPRITE_SCALE), // account for crop origin adjustment
-                Vec2::splat(16.0 * SPRITE_SCALE * world_scale.0),
-            ) {
-                cmd.entity(e).despawn();
-                match crop_type {
-                    CropType::Wheat => {
-                        inventory.add(Item::Wheat, 1);
-                    }
-                }
-                return;
-            }
-        }
+        return;
+    }
 
-        for (e, transform, plot_type) in &q_plots {
-            if math::pt_rect_collision(
-                mouse_pos.world.xy(),
-                transform.translation.xy(),
-                Vec2::splat(16.0 * SPRITE_SCALE * world_scale.0),
-            ) {
-                // TODO
+    for (e, transform, crop_type) in &q_crops {
+        if math::pt_rect_collision(
+            mouse_pos.world.xy(),
+            transform.translation.xy() - Vec2::new(0.0, 8.0 * SPRITE_SCALE), // account for crop origin adjustment
+            Vec2::splat(16.0 * SPRITE_SCALE * world_scale.0),
+        ) {
+            cmd.entity(e).despawn();
+            match crop_type {
+                CropType::Wheat => {
+                    inventory.add(Item::Wheat, 1);
+                }
+            }
+            return;
+        }
+    }
+
+    for (e, transform, plot_type) in &q_plots {
+        if math::pt_rect_collision(
+            mouse_pos.world.xy(),
+            transform.translation.xy(),
+            Vec2::splat(16.0 * SPRITE_SCALE * world_scale.0),
+        ) {
+            match plot_type {
+                PlotType::Grass => {
+                    cmd.entity(e).insert((
+                        assets.load(plots::DIRT) as Handle<Image>,
+                        PlotType::Dirt,
+                    ));
+                },
+                PlotType::Dirt => {
+                    cmd.spawn(CropBundle(
+                        SpriteBundle {
+                            texture: assets.load(crops::WHEAT),
+                            transform: transform.clone().with_translation(transform.translation + Vec3::new(0.0, 8.0 * SPRITE_SCALE * world_scale.0, 1.0)),
+                            ..default()
+                        },
+                        GameObj,
+                        super::FarmGameObj,
+                        CropType::Wheat,
+                    ));
+                },
             }
         }
     }

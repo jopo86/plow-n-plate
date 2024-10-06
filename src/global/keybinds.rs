@@ -14,11 +14,18 @@ impl Plugin for KeybindsPlugin {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Action {
     ToggleInventory,
+    LockCamera,
     // TODO: more actions...
 }
 
 #[derive(Resource)]
 pub struct Keybinds(pub HashMap<Action, KeyCode>);
+
+impl Keybinds {
+    pub fn get(&self, action: Action) -> KeyCode {
+        self.0.get(&action).unwrap().clone()
+    }
+}
 
 impl Default for Keybinds {
     fn default() -> Self {
@@ -28,5 +35,6 @@ impl Default for Keybinds {
 
 fn sys_fill_keybinds(mut keybinds: ResMut<Keybinds>) {
     keybinds.0.insert(Action::ToggleInventory, KeyCode::Tab);
+    keybinds.0.insert(Action::LockCamera, KeyCode::ControlLeft);
     // TODO: more keybinds...
 }
