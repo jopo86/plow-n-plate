@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::game::farm::FarmHudObj;
-use crate::global::assets::fonts;
+use crate::global::assets::{fonts, icons};
 use crate::global::colors::CustomColors;
 
 #[derive(Component)]
@@ -30,7 +30,7 @@ pub fn build(parent: &mut ChildBuilder, assets: &Res<AssetServer>) {
             FarmHudObj,
         ))
         .with_children(|parent| {
-            build_img_button(parent, assets, "icons/3.png", Action::Home);
+            build_img_button(parent, assets, icons::HOME, Action::Home);
             build_text_button(parent, assets, "?", Action::Other);
             build_text_button(parent, assets, "?", Action::Other);
             build_text_button(parent, assets, "?", Action::Other);
