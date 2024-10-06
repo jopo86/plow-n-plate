@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use std::collections::HashMap;
 
-use crate::global::state::{in_game_state, AppState, Game};
+use crate::global::{assets::textures::items, state::{in_game_state, AppState, Game}};
 
 use super::farm::InventorySlotHudObj;
 
@@ -30,7 +30,7 @@ impl Item {
 
     pub fn get_texture_path(&self) -> &'static str {
         match self {
-            Self::Wheat => "textures/wheat_icon.png",
+            Self::Wheat => items::WHEAT,
             // ...
         }
     }

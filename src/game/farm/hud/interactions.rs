@@ -58,5 +58,3 @@ fn sys_show_or_hide_inventory(
         }
     }
 }
-
-

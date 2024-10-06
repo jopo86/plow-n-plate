@@ -3,6 +3,7 @@ use super::*;
 use bevy::prelude::*;
 
 use crate::game::{GameObj, SPRITE_SCALE};
+use crate::global::assets::textures::{crops, plots};
 use crate::global::state::{AppState, Game};
 
 pub struct SpawnWorldPlugin;
@@ -65,8 +66,8 @@ fn spawn_plot(
     cmd.spawn(PlotBundle(
         SpriteBundle {
             texture: assets.load(match plot_type {
-                PlotType::Dirt => "textures/dirt.png",
-                PlotType::Grass => "textures/grass.png",
+                PlotType::Dirt => plots::DIRT,
+                PlotType::Grass => plots::GRASS,
             }),
             transform: Transform::from_xyz(pos.x, pos.y, pos.z)
                 .with_scale(Vec3::splat(SPRITE_SCALE)),
@@ -91,7 +92,7 @@ fn spawn_crop(
     cmd.spawn(CropBundle(
         SpriteBundle {
             texture: assets.load(match crop_type {
-                CropType::Wheat => "textures/wheat.png",
+                CropType::Wheat => crops::WHEAT,
             }),
             transform: Transform::from_xyz(pos.x, pos.y, pos.z)
                 .with_scale(Vec3::splat(SPRITE_SCALE)),
