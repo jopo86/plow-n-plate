@@ -19,6 +19,6 @@ impl Plugin for GlobalPlugin {
         app.init_resource::<MousePos>();
         app.add_systems(Startup, sys_spawn_camera);
         app.add_systems(Update, sys_update_mouse_pos);
-        app.add_plugins((keybinds::KeybindsPlugin, cursors::CursorsPlugin));
+        app.add_plugins(keybinds::KeybindsPlugin/*, cursors::CursorsPlugin*/);
     }
 }
